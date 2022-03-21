@@ -1,7 +1,7 @@
 <?php
 session_start();
 if($_SESSION){
-	header("Location: home.php");
+	header("Location: user.php");
 }
 ?>
 <!DOCTYPE html>
@@ -12,7 +12,7 @@ if($_SESSION){
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title> SVRA EXPRESS </title>
+        <title>SVRA EXPRESS</title>
 
         <!-- CSS -->
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
@@ -48,62 +48,91 @@ if($_SESSION){
 				<?php
 				if(isset($_POST['login'])){
 					include("config.php");
+					
 					$username	= $_POST['username'];
 					$password	= $_POST['password'];
 					$level		= $_POST['level'];
 					
 					$query = mysqli_query($koneksi, "SELECT * FROM user WHERE username='$username' AND password='$password'");
 						
-						if($level == 1 && $_SESSION['username']=$username && $_SESSION['password']=$password){
-							
-							
-							header("Location: home.php");
+						if($level == 1 && $username == '01' && $password == '12'){
+							$_SESSION['username']=$username;
+							$_SESSION['password']=$password;
+							$_SESSION['level']='admin';
+							header("Location: user.php");
+						}else if($level == 2&& $username == '02' && $password == '12'){
+							$_SESSION['username']=$username;
+							$_SESSION['password']=$password;
+							$_SESSION['level']='operator';
+							header("Location: user.php");
 						}else{
 							echo '<div class="alert alert-danger">Ups! Login gagal.</div>';
 						}
 					}
 				?>
 					<div class="col-sm-8 col-sm-offset-2 text">
-                            <h1><strong>Ekspedisi Pengiriman Barang</strong> </h1>
-							<h1> Login Form</h1>
+                            <h1><strong>SVRA EXPRESS</strong> </h1>
                             <div class="description">
                             	<p>
 	                            	Send Everything You Want~
                             	</p>
                             </div>
-                        </div>x
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6 col-sm-offset-3 form-box">
                         	<div class="form-top">
                         		<div class="form-top-left">
-                        			<h3>Login to our site</h3>
-                            		<p>Enter your username and password to log on:</p>
+                        			<b><h3>Register and create account</h3></b>
+									<p> Enter your data to create account : </p>
                         		</div>
                         		<div class="form-top-right">
                         			<i class="fa fa-key"></i>
                         		</div>
                             </div>
                             <div class="form-bottom">
-			                    <form role="form" action="" method="post" class="login-form">
-			                    	<div class="form-group">
-			                    		<label class="sr-only" for="form-username">Username</label>
-			                        	<input type="text" name="username" placeholder="Username..." class="form-username form-control" id="form-username">
-			                        </div>
-			                        <div class="form-group">
-			                        	<label class="sr-only" for="form-password">Password</label>
-			                        	<input type="password" name="password" placeholder="Password..." class="form-password form-control" id="form-password">
+			                   					  <form method = "POST" enctype = "multipart/form-data">
+							<div class = "form group">
+								<label for = "nama"> Nama </label>
+								<input type = "text" class = "form-control" name = "nama">
+							</div>
+							<div class = "form group">
+								<label for = "username"> Username </label>
+								<input type = "text" class = "form-control" name = "username">
+							</div>
+							<div class = "form group">
+								<label for = "email"> Email </label>
+								<input type = "text" class = "form-control" name = "email">
+							</div>
+							<div class="form-group">
+								<label for = "password"> Password </label>
+			                       <label class="sr-only" for="form-password">Password</label>
+									<input type="password" name="password" class="form-password form-control" id="form-password">
 			                        </div>
 									<div class="form-group">
-						<select name="level" class="form-control" required>
-							<option value="">Pilih Level User</option>
-							<option value="1">Admin</option>
-							</select>
-					</div>
-			                        <button type="submit" name="login" class="btn">Log in!</button>
-									<br>
-									</br><a href = "../dashboardddd/index.php" >Back to Home Page</a></p>
-			                    </form>
+										<select name="level" class="form-control" required>
+											<option value="">Pilih Level User</option>
+											<option value="1">Admin</option>
+										</select>
+									</div>
+							<br>
+							<button class = "btn btn-primary" name = "save" > Daftar </button>
+					  </form>
+								<?php
+								
+				$db_host = "localhost"; $db_user = "root"; $db_pass = ""; $db_name = "ekspedisi_pengiriman_barang";
+									if (isset ($_POST ['save'])) {
+										$koneksi= mysqli_connect( $db_host, $db_user, $db_pass, $db_name); 
+										$email = $_POST ['email'];
+										$nama = $_POST ['nama'];
+										$username = $_POST ['username'];
+										$password = $_POST ['password'];
+										$level = $_POST ['level'];
+										$simpan = mysqli_query ($koneksi, "INSERT INTO user VALUES ('$username','$password', '$nama','$email', '$level')");
+										echo "<br> <div class = 'alert alert-success text-center'> Anda berhasil daftar! </div>";
+										echo "<meta http-equiv= 'refresh' content ='1;url=index.php'>";
+										}
+								?>
 		                    </div>
                         </div>
                     </div>
